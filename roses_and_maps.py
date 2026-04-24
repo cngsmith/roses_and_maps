@@ -49,7 +49,7 @@ class RosesAndMaps:
             (self.df["x_coord"] >= x_min) &
             (self.df["x_coord"] <= x_max) &
             (self.df["y_coord"] >= y_min) &
-            (self.df["y_coord"] >= y_max) 
+            (self.df["y_coord"] <= y_max) 
             ].copy()
 
         #debugging check
