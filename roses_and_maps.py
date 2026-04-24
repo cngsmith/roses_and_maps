@@ -9,8 +9,8 @@ Coming soon: makes an accompanying map that plots the points of the lineations
 in the specified bounding box.
 
 input: 
-csv filepath
-(coming soon) bounding box corner coordinates
+filepath to csv
+bounding box corner coordinates
 
 output:
 rose diagram in pdf form
@@ -18,11 +18,8 @@ rose diagram in pdf form
 exceptions:
 -.csv must have x, y coordinates and line bearing columns labelled as:
 x_coord, y_coord, bearing_corrected
--(coming soon) x_coords and y_coords must be in decimal degrees (not yet done)
+-x_coord and y_coord must be in decimal degrees
 '''
-
-print("this is working")
-
 
 class RosesAndMaps:
     def __init__(self, csv_path,):
@@ -30,6 +27,11 @@ class RosesAndMaps:
         initializes the instance by reading in the data and setting up
         a copy for filtering
         '''
+        #adjustable attributes
+        self.r_max = 250
+        self.bin_width = 10
+        self.color = "green"
+
         #create a pandas dataframe of lineations in the csv file
         self.df = pd.read_csv(csv_path)
         #creating a copy of data from which to filter
@@ -40,6 +42,9 @@ class RosesAndMaps:
 
 
     def set_bbox(self, x_min, x_max, y_min, y_max):
+        '''
+        setting up bounding box.
+        '''
         self.filtered_df = self.df[
             (self.df["x_coord"] >= x_min) &
             (self.df["x_coord"] <= x_max) &
@@ -47,15 +52,36 @@ class RosesAndMaps:
             (self.df["y_coord"] >= y_max) 
             ].copy()
 
+        #debugging check
         print(f"{len(self.filtered_df)} lineations in bounding box.")
-    # def plot_rose(self, output_filename):
-    # def plot_map(self, output_filename):
 
+    def plot_rose(self):
+            '''
+            Plotting filtered dataframe as rose diagram.
+            '''
+            azimuths = self.filtered_df["bearing_corrected"].dropna()
+            lengths = [1] * len(azimuths)
+
+            fig = pygmt.Figure()
+
+            fig.rose(
+                length = lengths,
+                azimuth = azimuths,
+                region = [0, self.r_max, 0, 360],
+                sector = self.bin_width,
+                diameter = "15c",
+                fill = self.color,
+                pen = "1p,black",
+                frame = ["xg20", "yg30"],
+            )
+
+            fig.show()
+
+    # coming soon: def plot_map(self):
 
 if __name__ == "__main__":
     csv_path = input("Enter full path to CSV file: ").strip()
     
-    # Initialize the instance
     my_lineations = RosesAndMaps(csv_path)
 
     x1 = float(input("Enter x_min: "))
@@ -63,52 +89,5 @@ if __name__ == "__main__":
     y1 = float(input("Enter y_min: "))
     y2 = float(input("Enter y_max: "))
     
-    # This triggers the filtering
     my_lineations.set_bbox(x1, x2, y1, y2)
- 
-
-# ##asking for user input: data file path and map bounding box
-# csv_file = input("Enter full path to CSV file: ").strip()
-# df = pd.read_csv(csv_file)
-
-# x_min = input("Enter the x_coordinate for the top left corner of the map: ").strip()
-# y_max = input("Enter the y_coordinate for the top left corner of the map: ").strip()
-# x_max = input("Enter the x_coordinate for the bottom right corner of the map: ").strip()
-# y_min = input("Enter the y_coordinate for the bottom right corner of the map: ").strip()
-
-
-
-
-
-# #asking user for file and reading it
-# csv_file = input("Enter full path to CSV file: ").strip()
-# df = pd.read_csv(csv_file)
-
-# #extracting line bearings into a dataframe
-# azimuths = df["bearing_corrected"].dropna()
-# lengths = [1] * len(azimuths) 
-
-
-# #variables to adjust
-# bin_width = 10
-# r_max = 250
-# radial_grid = "xg20"
-# azimuth_grid = "yg30"
-# color = "green"
-
-
-# #PYGMT
-# fig = pygmt.Figure()
-
-# fig.rose(
-#     length=lengths,
-#     azimuth=azimuths,
-#     region=[0, r_max, 0, 360],
-#     sector=bin_width,
-#     diameter="15c",
-#     fill=color,
-#     pen="1p,black",
-#     frame=[radial_grid, azimuth_grid],
-# )
-
-# fig.show()
+    my_lineations.plot_rose()
