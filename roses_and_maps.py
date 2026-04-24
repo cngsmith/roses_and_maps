@@ -36,10 +36,18 @@ class RosesAndMaps:
         self.filtered_df = self.df.copy()
 
         #debugging check
-        print(f"Successfully loaded {len(self.df)} lineations.")
+        print(f"{len(self.df)} lineations in csv_file.")
 
 
-    # def set_bbox(self, x1, x2, y1, y2):
+    def set_bbox(self, x_min, x_max, y_min, y_max):
+        self.filtered_df = self.df[
+            (self.df["x_coord"] >= x_min) &
+            (self.df["x_coord"] <= x_max) &
+            (self.df["y_coord"] >= y_min) &
+            (self.df["y_coord"] >= y_max) 
+            ].copy()
+
+        print(f"{len(self.filtered_df)} lineations in bounding box.")
     # def plot_rose(self, output_filename):
     # def plot_map(self, output_filename):
 
@@ -49,6 +57,14 @@ if __name__ == "__main__":
     
     # Initialize the instance
     my_lineations = RosesAndMaps(csv_path)
+
+    x1 = float(input("Enter x_min: "))
+    x2 = float(input("Enter x_max: "))
+    y1 = float(input("Enter y_min: "))
+    y2 = float(input("Enter y_max: "))
+    
+    # This triggers the filtering
+    my_lineations.set_bbox(x1, x2, y1, y2)
  
 
 # ##asking for user input: data file path and map bounding box
