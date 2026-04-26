@@ -1,8 +1,12 @@
 # roses_and_maps
+
+## version 1.5.3
+
 A program to create rose diagrams and maps using PyGMT, for mega-scale glacial lineation interpretation.
 
-The current functionality is that it is able to read in real data and produce a rose diagram as a .pdf given bounding box coordinates.
-Coming soon: Associated maps showing the position of mega-scale glacial lineations.
+The script is able to read in bearing and coordinate data from a .csv and produce a rose diagram as a .pdf given bounding box coordinates. It also produces an associated map showing the position of the lineation data.
+
+Toy data is provided for testing.
 
 ![example rose diagram](example_rosediagrams.png)
 
