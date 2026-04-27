@@ -1,6 +1,6 @@
 # roses_and_maps
 
-## version 1.5.3
+## version 1.6.3
 
 A program to create rose diagrams and maps using PyGMT, for mega-scale glacial lineation interpretation.
 
@@ -16,7 +16,7 @@ The script is organized with one class called RosesAndMaps. One function reads i
 
 Task 2:
 
-I use input() as a parameter input system. I will also plan to add tests, like assert statements, within my code.
+I use input() as a parameter input system, and have added assert statements to act as tests within my code.
 
 ## installation instructions:
 
