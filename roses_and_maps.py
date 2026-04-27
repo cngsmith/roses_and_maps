@@ -28,6 +28,17 @@ map projection: projection
 map color ramp: cmap #oleron suggested for bathymetry and topography
 '''
 
+#class suggestions:
+
+#export copied filtered dataframe back to csv to put back in arc
+#add a function that calculates the mean orientation for a population
+#plot lineations as lines not as points?
+#!!!add a function that intakes an orientation range, and outputs a map with the lineation position!!!
+#make it so that rose diagram plots directly on the map
+#statistically tease out which populations are grouped together (areas of msgl vs ploughmarks)
+#plot dominant direction of lineation onto map
+
+
 class RosesAndMaps:
     def __init__(self, csv_path,):
         '''
