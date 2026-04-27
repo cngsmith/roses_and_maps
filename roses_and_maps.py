@@ -1,7 +1,6 @@
 import pandas as pd
 import pygmt
 
-
 '''
 This script reads in a csv of lineations with line bearings between 0-180, and
 corner coordinates of a bounding box, and creates a rose diagram using PyGMT. 
@@ -22,16 +21,28 @@ x_coord, y_coord, bearing_corrected
 -x_coord and y_coord must be in decimal degrees
 
 adjustable attributes:
-.....
-
+rose plot radius: r_max
+rose plot bin width: bin_width
+rose plot petal color: color
+map projection: projection
+map color ramp: cmap #oleron suggested for bathymetry and topography
 '''
 
 class RosesAndMaps:
     def __init__(self, csv_path,):
         '''
         Initializes the instance by reading in the data and setting up
-        a copy for filtering by bounding box.
+        a copy for filtering by the bounding box.
+
+        Adjust variables here
+
+        Some test statements
+
         '''
+        # test statement 1
+        assert csv_path.lower().endswith('.csv'), \
+        "Make sure data is in .csv format."
+
         # Adjustable attributes for rose plot
         self.r_max = 250
         self.bin_width = 10
@@ -41,9 +52,13 @@ class RosesAndMaps:
         self.projection = "M15c"
         self.cmap = "oleron"
 
-        # Creates a pandas dataframe of lineations in the csv file.
         self.df = pd.read_csv(csv_path)
-        # Creates a copy of data from which to filter.
+
+        # test statement 2
+        required_cols = ["x_coord", "y_coord", "bearing_corrected"]
+        for col in required_cols:
+            assert col in self.df.columns, "Wrong column name or names."
+    
         self.filtered_df = self.df.copy()
 
         #debugging check
@@ -54,7 +69,15 @@ class RosesAndMaps:
         '''
         Sets up the bounding box.
         '''
+        assert x_min < x_max, "x_min must be less than x_max."
+        assert y_min < y_max, "y_min must be less than y_max."
 
+        assert -180 <= x_min <= 180 and -180 <= x_max <= 180, \
+            "x coordinates must be between -180 and 180."
+        
+        assert -90 <= y_min <= 90 and -90 <= y_max <= 90, \
+            "y coordinates must be between -90 and 90."
+        
         # Saves the coordinate values into self.
         self.x_min, self.x_max = x_min, x_max
         self.y_min, self.y_max = y_min, y_max
