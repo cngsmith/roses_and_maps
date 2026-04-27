@@ -128,7 +128,7 @@ class RosesAndMaps:
         # Defines figure properties
         fig.grdimage(
             grid = grid, 
-            frame = "a", 
+            frame = "a1,", 
             projection = self.projection, 
             cmap = self.cmap
         )
